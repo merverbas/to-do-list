@@ -1,27 +1,49 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./styles.css";
 
 const INITIAL_STATE = [
-  { id: 1, baslik: "Alisveris Yap", tamamlandi : false },
-  { id: 2, baslik: "Fatura ode", tamamlandi: false }
+  { id: 1, baslik: "Alışveriş Yap", tamamlandi: false },
+  { id: 2, baslik: "Fatura Öde", tamamlandi: true }
 ];
 
 export default function App() {
   const [liste, setListe] = useState(INITIAL_STATE);
+  const [yeniBaslik, setYeniBaslik] = useState("");
+  console.log(yeniBaslik);
 
-  return(
+  return (
     <div className="App">
-      <h1>YApılacaklar Listesi</h1>
+      <h1>Yapılacaklar Listesi</h1>
       <div className="ekleme_formu">
-        <input placeholder="listeye ekle" />
-        <button>Ekle</button>
+
+        <input
+          value={yeniBaslik}
+          onChange={(e) => setYeniBaslik(e.target.value)}
+          placeholder="listeye ekle" />
+        <button
+          onClick={() => {
+
+            setListe([...liste, { id: Date.now(), baslik: yeniBaslik, completed: false }]);
+            setYeniBaslik("");
+            }
+          }
+        >Ekle
+        </button>
+
       </div>
       <div className="liste">
-        <div>YApılacaklar</div>
-        <div className="yapildi">Yapıldı</div>
+        {liste.map(item =>
+          <div
+
+            key={item.id}
+            onClick={() => {
+              setListe(liste.map(el => el.id === item.id ? { ...el, tamamlandi: !el.tamamlandi } : el))
+            }} className={item.tamamlandi ? "yapildi" : ""}>{item.baslik}</div>)}
+
+        {/* <div>YApılacaklar</div>
+        <div className="yapildi">Yapıldı</div> */}
       </div>
       <button className="temizle">Tamamlananları Temizle</button>
     </div>
   );
 }
-export default App;
