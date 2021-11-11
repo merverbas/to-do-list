@@ -8,7 +8,20 @@ const INITIAL_STATE = [
 
 export default function App() {
   const [liste, setListe] = useState(INITIAL_STATE);
-  const [yeniBaslik, setYeniBaslik] = useState(""); 
+  const [yeniBaslik, setYeniBaslik] = useState("");
+
+  const addNew = title => {
+    setListe([...liste, { id: Date.now(), baslik: title, tamamlandi: false }]);
+    setYeniBaslik("");
+  }
+
+  const markCompleted = id => {
+    setListe(liste.map(el => el.id === id ? { ...el, tamamlandi: !el.tamamlandi } : el))
+  }
+
+  const clearCompleted = () => {
+    setListe(liste.filter(item => !item.tamamlandi));
+  }
 
   return (
     <div className="App">
@@ -20,29 +33,22 @@ export default function App() {
           onChange={(e) => setYeniBaslik(e.target.value)}
           placeholder="listeye ekle" />
         <button
-          onClick={() => {
-
-            setListe([...liste, { id: Date.now(), baslik: yeniBaslik, completed: false }]);
-            setYeniBaslik("");
-            }
-          }
-        >Ekle
-        </button>
+          onClick={() => { addNew(yeniBaslik) }}>Ekle</button>
 
       </div>
       <div className="liste">
-        {liste.map(item =>
+        {liste.map((item, index) =>
           <div
 
-            key={item.id}
+            key={index}
             onClick={() => {
-              setListe(liste.map(el => el.id === item.id ? { ...el, tamamlandi: !el.tamamlandi } : el))
+              markCompleted(item.id);
             }} className={item.tamamlandi ? "yapildi" : ""}>{item.baslik}</div>)}
 
-        {/* <div>YApılacaklar</div>
-        <div className="yapildi">Yapıldı</div> */}
       </div>
-      <button className="temizle">Tamamlananları Temizle</button>
+      <button onClick={() =>
+        clearCompleted()}
+        className="temizle">Tamamlananları Temizle</button>
     </div>
   );
 }
