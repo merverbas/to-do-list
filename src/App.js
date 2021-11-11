@@ -8,8 +8,7 @@ const INITIAL_STATE = [
 
 export default function App() {
   const [liste, setListe] = useState(INITIAL_STATE);
-  const [yeniBaslik, setYeniBaslik] = useState("");
-  console.log(yeniBaslik);
+  const [yeniBaslik, setYeniBaslik] = useState(""); 
 
   return (
     <div className="App">
